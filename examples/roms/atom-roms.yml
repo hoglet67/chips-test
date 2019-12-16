@@ -1,6 +1,8 @@
 ---
 files:
     - abasic.ic20
+    - abasic_patched.ic20
     - afloat.ic21
+    - afloat_patched.ic21
     - dosrom.u15
-
+    - atommc3.u15

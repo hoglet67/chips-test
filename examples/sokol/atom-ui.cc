@@ -8,6 +8,7 @@
 #include "chips/mc6847.h"
 #include "chips/i8255.h"
 #include "chips/m6522.h"
+#include "chips/atommc.h"
 #include "chips/beeper.h"
 #include "chips/clk.h"
 #include "chips/kbd.h"

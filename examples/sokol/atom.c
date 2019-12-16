@@ -16,6 +16,7 @@
 #include "chips/mc6847.h"
 #include "chips/i8255.h"
 #include "chips/m6522.h"
+#include "chips/atommc.h"
 #include "chips/beeper.h"
 #include "chips/clk.h"
 #include "chips/kbd.h"
@@ -23,6 +24,7 @@
 #include "systems/atom.h"
 #include "atom-roms.h"
 
+#define ATOMMC
 /* imports from cpc-ui.cc */
 #ifdef CHIPS_USE_UI
 #include "ui.h"
@@ -70,12 +72,21 @@ atom_desc_t atom_desc(atom_joystick_type_t joy_type) {
         .audio_sample_rate = saudio_sample_rate(),
         .pixel_buffer = gfx_framebuffer(),
         .pixel_buffer_size = gfx_framebuffer_size(),
+#ifdef ATOMMC
+        .rom_abasic = dump_abasic_patched_ic20,
+        .rom_abasic_size = sizeof(dump_abasic_patched_ic20),
+        .rom_afloat = dump_afloat_ic21,
+        .rom_afloat_size = sizeof(dump_afloat_ic21),
+        .rom_dosrom = dump_atommc3_u15,
+        .rom_dosrom_size = sizeof(dump_atommc3_u15)
+#else
         .rom_abasic = dump_abasic_ic20,
         .rom_abasic_size = sizeof(dump_abasic_ic20),
         .rom_afloat = dump_afloat_ic21,
         .rom_afloat_size = sizeof(dump_afloat_ic21),
         .rom_dosrom = dump_dosrom_u15,
         .rom_dosrom_size = sizeof(dump_dosrom_u15)
+#endif
     };
 }
 
