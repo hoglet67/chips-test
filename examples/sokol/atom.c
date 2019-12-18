@@ -174,46 +174,15 @@ void app_input(const sapp_event* event) {
         return;
     }
     #endif
-    int c = 0;
     switch (event->type) {
-        case SAPP_EVENTTYPE_CHAR:
-            c = (int) event->char_code;
-            if ((c > 0x20) && (c < 0x7F)) {
-                /* need to invert case (unshifted is upper caps, shifted is lower caps */
-                if (isupper(c)) {
-                    c = tolower(c);
-                }
-                else if (islower(c)) {
-                    c = toupper(c);
-                }
-                atom_key_down(&atom, c);
-                atom_key_up(&atom, c);
-            }
-            break;
         case SAPP_EVENTTYPE_KEY_UP:
         case SAPP_EVENTTYPE_KEY_DOWN:
-            switch (event->key_code) {
-                case SAPP_KEYCODE_SPACE:        c = 0x20; break;
-                case SAPP_KEYCODE_RIGHT:        c = 0x09; break;
-                case SAPP_KEYCODE_LEFT:         c = 0x08; break;
-                case SAPP_KEYCODE_DOWN:         c = 0x0A; break;
-                case SAPP_KEYCODE_UP:           c = 0x0B; break;
-                case SAPP_KEYCODE_ENTER:        c = 0x0D; break;
-                case SAPP_KEYCODE_INSERT:       c = 0x1A; break;
-                case SAPP_KEYCODE_HOME:         c = 0x19; break;
-                case SAPP_KEYCODE_BACKSPACE:    c = 0x01; break;
-                case SAPP_KEYCODE_ESCAPE:       c = 0x1B; break;
-                case SAPP_KEYCODE_F1:           c = 0x0C; break; /* mapped to Ctrl+L (clear screen) */
-                case SAPP_KEYCODE_F10:          c = 0xFF; break; /* BREAK */
-                default:                        c = 0;
+            printf("%d %d\n", event->type, event->key_code);
+            if (event->type == SAPP_EVENTTYPE_KEY_DOWN) {
+               atom_key_down(&atom, event->key_code);
             }
-            if (c) {
-                if (event->type == SAPP_EVENTTYPE_KEY_DOWN) {
-                    atom_key_down(&atom, c);
-                }
-                else {
-                    atom_key_up(&atom, c);
-                }
+            else {
+               atom_key_up(&atom, event->key_code);
             }
             break;
         case SAPP_EVENTTYPE_TOUCHES_BEGAN:
