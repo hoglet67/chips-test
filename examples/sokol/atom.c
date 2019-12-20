@@ -25,7 +25,6 @@
 #include "systems/atom.h"
 #include "atom-roms.h"
 
-#define ATOMMC
 /* imports from cpc-ui.cc */
 #ifdef CHIPS_USE_UI
 #include "ui.h"
@@ -65,29 +64,22 @@ static void push_audio(const float* samples, int num_samples, void* user_data) {
     saudio_push(samples, num_samples);
 }
 
-/* get atom_desc_t struct based on joystick type */
-atom_desc_t atom_desc(atom_joystick_type_t joy_type) {
+/* get atom_desc_t struct based on joystick type and atommc configuration*/
+atom_desc_t atom_desc(atom_joystick_type_t joy_type, bool atommc_enabled, bool atommc_autoboot) {
     return (atom_desc_t) {
         .joystick_type = joy_type,
         .audio_cb = push_audio,
         .audio_sample_rate = saudio_sample_rate(),
         .pixel_buffer = gfx_framebuffer(),
         .pixel_buffer_size = gfx_framebuffer_size(),
-#ifdef ATOMMC
-        .rom_abasic = dump_abasic_patched_ic20,
-        .rom_abasic_size = sizeof(dump_abasic_patched_ic20),
-        .rom_afloat = dump_afloat_ic21,
-        .rom_afloat_size = sizeof(dump_afloat_ic21),
-        .rom_dosrom = dump_atommc3_u15,
-        .rom_dosrom_size = sizeof(dump_atommc3_u15)
-#else
-        .rom_abasic = dump_abasic_ic20,
+        .rom_abasic = atommc_enabled ? dump_abasic_patched_ic20 : dump_abasic_ic20,
         .rom_abasic_size = sizeof(dump_abasic_ic20),
         .rom_afloat = dump_afloat_ic21,
         .rom_afloat_size = sizeof(dump_afloat_ic21),
-        .rom_dosrom = dump_dosrom_u15,
-        .rom_dosrom_size = sizeof(dump_dosrom_u15)
-#endif
+        .rom_dosrom = atommc_enabled ? dump_atommc3_u15 : dump_dosrom_u15,
+        .rom_dosrom_size = sizeof(dump_dosrom_u15),
+        .atommc_enabled = atommc_enabled,
+        .atommc_autoboot = atommc_autoboot,
     };
 }
 
@@ -116,7 +108,19 @@ void app_init(void) {
             joy_type = ATOM_JOYSTICKTYPE_MMC;
         }
     }
-    atom_desc_t desc = atom_desc(joy_type);
+    bool atommc_enabled = true;
+    bool atommc_autoboot = false;
+    if (sargs_exists("atommc")) {
+       if (sargs_equals("atommc", "0") || sargs_equals("atommc", "false") || sargs_equals("atommc", "no")) {
+          atommc_enabled = false;
+       }
+    }
+    if (atommc_enabled && sargs_exists("autoboot")) {
+       if (sargs_equals("autoboot", "1") || sargs_equals("autoboot", "true") || sargs_equals("autoboot", "yes")) {
+          atommc_autoboot = true;
+       }
+    }
+    atom_desc_t desc = atom_desc(joy_type, atommc_enabled, atommc_autoboot);
     atom_init(&atom, &desc);
     #ifdef CHIPS_USE_UI
     atomui_init(&atom);
