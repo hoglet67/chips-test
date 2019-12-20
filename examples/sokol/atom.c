@@ -205,7 +205,6 @@ void app_input(const sapp_event* event) {
                 case SAPP_KEYCODE_BACKSPACE:    c = 0x01; break;
                 case SAPP_KEYCODE_ESCAPE:       c = 0x1B; break;
                 case SAPP_KEYCODE_F1:           c = 0x0C; break; /* mapped to Ctrl+L (clear screen) */
-                case SAPP_KEYCODE_F10:          c = 0xFF; break; /* BREAK */
                 default:                        c = 0;
             }
             if (c) {
