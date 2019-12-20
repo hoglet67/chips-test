@@ -198,6 +198,7 @@ void app_input(const sapp_event* event) {
                 case SAPP_KEYCODE_RIGHT:        c = 0x09; break;
                 case SAPP_KEYCODE_LEFT:         c = 0x08; break;
                 case SAPP_KEYCODE_DOWN:         c = 0x0A; break;
+                case SAPP_KEYCODE_MENU:
                 case SAPP_KEYCODE_UP:           c = 0x0B; break;
                 case SAPP_KEYCODE_ENTER:        c = 0x0D; break;
                 case SAPP_KEYCODE_INSERT:       c = 0x1A; break;
@@ -205,6 +206,17 @@ void app_input(const sapp_event* event) {
                 case SAPP_KEYCODE_BACKSPACE:    c = 0x01; break;
                 case SAPP_KEYCODE_ESCAPE:       c = 0x1B; break;
                 case SAPP_KEYCODE_F1:           c = 0x0C; break; /* mapped to Ctrl+L (clear screen) */
+                case SAPP_KEYCODE_RIGHT_SHIFT:
+                case SAPP_KEYCODE_LEFT_SHIFT:   c = ATOM_KEY_SHIFT; break;
+                case SAPP_KEYCODE_RIGHT_CONTROL:
+                case SAPP_KEYCODE_LEFT_CONTROL: c = ATOM_KEY_CTRL; break;
+                case SAPP_KEYCODE_RIGHT_ALT:
+                case SAPP_KEYCODE_LEFT_ALT:
+                case SAPP_KEYCODE_KP_0:         c = ATOM_KEY_REPEAT; break;
+                case SAPP_KEYCODE_F10:
+                case SAPP_KEYCODE_F12:          c = ATOM_KEY_BREAK; break;
+                case SAPP_KEYCODE_TAB:          c = ATOM_KEY_LOCK; break;
+                case SAPP_KEYCODE_END:          c = ATOM_KEY_COPY; break;
                 default:                        c = 0;
             }
             if (c) {
