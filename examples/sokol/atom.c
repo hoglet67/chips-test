@@ -178,7 +178,7 @@ void app_input(const sapp_event* event) {
     switch (event->type) {
         case SAPP_EVENTTYPE_KEY_UP:
         case SAPP_EVENTTYPE_KEY_DOWN:
-            // printf("%d %d\n", event->type, event->key_code);
+            printf("%d %d\n", event->type, event->key_code);
             if (event->type == SAPP_EVENTTYPE_KEY_DOWN) {
                atom_key_down(&atom, event->key_code);
             }
