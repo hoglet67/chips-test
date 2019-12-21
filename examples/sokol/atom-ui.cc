@@ -39,14 +39,14 @@
 
 extern "C" {
 
-atom_desc_t atom_desc(atom_joystick_type_t joy_type);
+atom_desc_t atom_desc(atom_joystick_type_t joy_type, bool atommc_enabled, bool atommc_autoboot);
 
 static ui_atom_t ui_atom;
 static double exec_time;
 
 /* reboot callback */
 static void boot_cb(atom_t* sys) {
-    atom_desc_t desc = atom_desc(sys->joystick_type);
+    atom_desc_t desc = atom_desc(sys->joystick_type, sys->atommc_enabled, sys->atommc_autoboot);
     atom_init(sys, &desc);
 }
 
